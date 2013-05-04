@@ -21,6 +21,7 @@ create or update the key _keyname_ with the value in the post data.
 
 ```bash
 $ curl --data "value=thevalue" "localhost:9999/keyname"
+Sorry, this item has gone mainstream
 ```
 
 ## get
@@ -28,6 +29,7 @@ get the value stored in _keyname_. If the key has been accessed so much that it 
 
 ```bash
 $ curl "localhost:9999/keyname"
+thevalue
 ```
 
 ## delete
@@ -35,6 +37,7 @@ delete the key from the database
 
 ```bash
 $ curl -X DELETE "localhost:9999/keyname"
+deleted keyname
 ```
 
 # Limitations
