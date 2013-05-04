@@ -9,11 +9,11 @@ import (
 type Datastore struct {
 	// OutOfStyleSeconds is the number of seconds until an item that has gone
 	// mainstream goes out of style and can be used again.
-	OutOfStyleSeconds uint32
+	OutOfStyleSeconds uint
 
 	// MainstreamThreshold is the number of accesses that make an item mainstream
 	// and thus unusable until it has gone out of style.
-	MainstreamThreshold uint8
+	MainstreamThreshold uint
 }
 
 // the key value store
@@ -75,7 +75,7 @@ func RemoveFromMainstreamKeys(key string) {
 }
 
 // Start watching mainstream items to go out of style so that they can be used again.
-func (self *Datastore) ProcessOutOfStyle() {
+func ProcessOutOfStyle() {
 	ticker := time.NewTicker(time.Second)
 	go func() {
 		for {

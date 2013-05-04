@@ -1,12 +1,40 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"github.com/hoisie/web"
 	"github.com/robmerrell/hipsterdb/datastore"
+	"os"
 )
 
 // the datastore that we interface with
 var ds *datastore.Datastore
+
+// command line flags
+var flagOutOfStyleSeconds, flagMainstreamThreshold uint
+var flagPort string
+
+// command line usage
+func usage() {
+	fmt.Fprintf(os.Stderr, "usage: hipsterdb [options]\n")
+	flag.PrintDefaults()
+	os.Exit(2)
+}
+
+func init() {
+	// setup the command line processing
+	flag.UintVar(&flagOutOfStyleSeconds, "o", 100, "seconds it takes for mainstream data to go out of style")
+	flag.UintVar(&flagMainstreamThreshold, "m", 20, "how many times data can be accessed before it is mainstream")
+	flag.StringVar(&flagPort, "p", ":9999", "port number to run the DB interface on")
+
+	flag.Usage = usage
+	flag.Parse()
+
+	// setup our datastore
+	ds = &datastore.Datastore{OutOfStyleSeconds: flagOutOfStyleSeconds, MainstreamThreshold: flagMainstreamThreshold}
+	datastore.ProcessOutOfStyle()
+}
 
 // Returns a key or abort with an error if it doesn't exist or the item
 // has gone mainstream.
@@ -51,12 +79,8 @@ func deleteItem(ctx *web.Context, key string) string {
 }
 
 func main() {
-	// setup our datastore
-	ds = &datastore.Datastore{OutOfStyleSeconds: 3, MainstreamThreshold: 3}
-	ds.ProcessOutOfStyle()
-
 	web.Get("/(.*)", getItem)
 	web.Post("/(.*)", upsertItem)
 	web.Delete("/(.*)", deleteItem)
-	web.Run(":9999")
+	web.Run(flagPort)
 }

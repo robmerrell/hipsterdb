@@ -13,10 +13,10 @@ type Item struct {
 	Value string
 
 	// MainstreamScore is the score given to an item to determine how mainstream it is
-	MainstreamScore uint8
+	MainstreamScore uint
 
 	// TTOutOfStyle is the time in seconds until this item goes out of style and the MainstreamScore is reset
-	TTOutOfStyle uint32
+	TTOutOfStyle uint
 }
 
 // NewItem creates a new item for the datastore
@@ -27,7 +27,7 @@ func NewItem(key, value string) *Item {
 // Increase the mainstream score of an item. If the item has gone mainstream then also
 // set the TTOutOfStyle countdown to use the item again. Returns a boolean stating whether
 // the item went mainstream or not.
-func (self *Item) IncrementMainstreamScore(mainstreamThreshold uint8, outOfStyleSeconds uint32) bool {
+func (self *Item) IncrementMainstreamScore(mainstreamThreshold, outOfStyleSeconds uint) bool {
 	self.MainstreamScore++
 
 	isMainstream := self.MainstreamScore >= mainstreamThreshold
