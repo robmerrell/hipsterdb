@@ -45,6 +45,8 @@ func upsertItem(ctx *web.Context, key string) string {
 // Delete an item from the datastore.
 func deleteItem(ctx *web.Context, key string) string {
 	ds.DeleteItem(key)
+	datastore.RemoveFromMainstreamKeys(key)
+
 	return "deleted " + key
 }
 

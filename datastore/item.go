@@ -44,11 +44,7 @@ func (self *Item) DecrementOutOfStyle() {
 	self.TTOutOfStyle--
 
 	if self.TTOutOfStyle <= 0 {
-		// remove from the list of mainstream keys
-		for e := mainstreamKeys.Front(); e != nil; e = e.Next() {
-			mainstreamKeys.Remove(e)
-		}
-
+		RemoveFromMainstreamKeys(self.Key)
 		log.Printf("%s is now out of style", self.Key)
 		self.MainstreamScore = 0
 	}

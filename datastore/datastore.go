@@ -64,6 +64,16 @@ func (self *Datastore) GetItem(key string) (*Item, error) {
 	return item, nil
 }
 
+// Remove a key from the list of mainstream keys
+func RemoveFromMainstreamKeys(key string) {
+	for e := mainstreamKeys.Front(); e != nil; e = e.Next() {
+		mainstreamKey := e.Value.(string)
+		if key == mainstreamKey {
+			mainstreamKeys.Remove(e)
+		}
+	}
+}
+
 // Start watching mainstream items to go out of style so that they can be used again.
 func (self *Datastore) ProcessOutOfStyle() {
 	ticker := time.NewTicker(time.Second)
